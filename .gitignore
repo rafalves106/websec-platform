@@ -1,0 +1,15 @@
+# dependências
+node_modules/
+.next/
+
+# dados sensíveis / gerados
+backend/.env
+bot/.env
+backend/data/
+bot/.wwebjs_auth/
+bot/.wwebjs_cache/
+
+# sistema
+.DS_Store
+*.log
+npm-debug.log*

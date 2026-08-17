@@ -1,0 +1,51 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: websec-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    volumes:
+      - backend_data:/app/data
+    ports:
+      - "3001:3001"
+    networks:
+      - websec-net
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # ajuste pro domínio real quando publicar (ex: https://api.websec.seudominio.com)
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+    container_name: websec-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    networks:
+      - websec-net
+
+  bot:
+    build:
+      context: ./bot
+    container_name: websec-bot
+    restart: unless-stopped
+    env_file:
+      - ./bot/.env
+    volumes:
+      - bot_session:/app/.wwebjs_auth
+    networks:
+      - websec-net
+    # o bot precisa do QR code na primeira vez — rode `docker compose logs -f bot`
+    # pra ver o QR no terminal e escanear com o WhatsApp do celular
+
+networks:
+  websec-net:
+    driver: bridge
+
+volumes:
+  backend_data:
+  bot_session:

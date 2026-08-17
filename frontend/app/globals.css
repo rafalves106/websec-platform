@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #0a0a0b;
+  color: #f1f1f1;
+}
+
+/* Efeito de "carbono/fibra" sutil pros cards */
+.carbon-card {
+  background:
+    repeating-linear-gradient(45deg, #16161a 0px, #16161a 2px, #131316 2px, #131316 4px);
+  border: 1px solid #2a2a2e;
+}
+
+/* Barra de progresso estilo conta-giros */
+.tach-bar {
+  background: linear-gradient(90deg, #39ff88 0%, #39ff88 70%, #ff3b3b 100%);
+}

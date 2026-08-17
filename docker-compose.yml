@@ -4,8 +4,12 @@ services:
       context: ./backend
     container_name: websec-backend
     restart: unless-stopped
-    env_file:
-      - ./backend/.env
+    environment:
+      PORT: 3001
+      GROK_API_KEY: ${GROK_API_KEY}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      GITHUB_USERNAME: ${GITHUB_USERNAME}
+      JWT_SECRET: ${JWT_SECRET}
     volumes:
       - backend_data:/app/data
     ports:
@@ -33,14 +37,16 @@ services:
       context: ./bot
     container_name: websec-bot
     restart: unless-stopped
-    env_file:
-      - ./bot/.env
+    environment:
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      MY_WHATSAPP_NUMBER: ${MY_WHATSAPP_NUMBER}
+      REMINDER_CRON: ${REMINDER_CRON:-0 19 * * 1-5}
     volumes:
       - bot_session:/app/.wwebjs_auth
     networks:
       - websec-net
-    # o bot precisa do QR code na primeira vez — rode `docker compose logs -f bot`
-    # pra ver o QR no terminal e escanear com o WhatsApp do celular
+    # o bot precisa do QR code na primeira vez — veja os logs do container
+    # (na aba "Logs" do container no Portainer) pra ver o QR e escanear com o WhatsApp
 
 networks:
   websec-net:

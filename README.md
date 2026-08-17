@@ -15,30 +15,20 @@ websec-platform/
 └── bot/               # bot de WhatsApp (whatsapp-web.js) que dispara o lembrete
 ```
 
-## Como rodar com Docker Compose (produção / servidor)
+## Como rodar via Portainer (recomendado pra você)
 
-1. Copie os arquivos de exemplo e preencha com suas chaves reais:
-   ```
-   cp backend/.env.example backend/.env
-   cp bot/.env.example bot/.env
-   ```
-2. Suba tudo:
-   ```
-   docker compose up -d --build
-   ```
-3. Escaneie o QR code do WhatsApp na primeira vez:
-   ```
-   docker compose logs -f bot
-   ```
-   (aparece o QR direto no terminal — escaneia com o WhatsApp do celular)
-4. Rode o seed dentro do container do backend (só na primeira vez):
-   ```
-   docker compose exec backend node src/db/seed.js
-   ```
+1. Suba o projeto no seu GitHub (veja seção de Git mais abaixo, se ainda não fez)
+2. No Portainer: **Stacks** → **Add stack** → método **Repository**
+3. Cole a URL do repositório. Se for privado, preencha usuário/token do GitHub no campo de autenticação
+4. Em **Compose path**, deixe `docker-compose.yml`
+5. Na seção **Environment variables**, cole o conteúdo do arquivo `.env.example` da raiz, preenchido com seus valores reais (chave do Grok, token do GitHub, seu número de WhatsApp, domínios)
+6. Clique em **Deploy the stack**
+7. Pra escanear o QR code do WhatsApp na primeira vez: vá no container `websec-bot` → aba **Logs**, o QR aparece ali em texto (ASCII), escaneie com o WhatsApp do celular
+8. Rode o seed uma vez: no container `websec-backend`, use o **Console** do Portainer (botão `>_`) e execute `node src/db/seed.js`
 
-Serviços expostos: frontend na porta 3000, backend na porta 3001. No seu nginx + Cloudflare Tunnel, aponte o domínio da plataforma pra porta 3000, e (se quiser expor a API separadamente) um subdomínio pra porta 3001.
+Sempre que atualizar o código no GitHub, no Portainer basta ir na stack e clicar em **Pull and redeploy** (ou **Update the stack**) pra puxar a versão nova.
 
-Os dados persistem em dois volumes Docker: `backend_data` (banco SQLite) e `bot_session` (sessão do WhatsApp, pra não precisar escanear o QR toda vez que reiniciar o container).
+## Como rodar com Docker Compose puro (linha de comando)
 
 ## Como rodar localmente sem Docker (desenvolvimento)
 
@@ -48,15 +38,7 @@ Os dados persistem em dois volumes Docker: `backend_data` (banco SQLite) e `bot_
 
 ## Variáveis de ambiente necessárias
 
-Crie um `.env` em `backend/` com:
-
-```
-DATABASE_URL=postgres://user:pass@localhost:5432/websec
-GROK_API_KEY=sua_chave_aqui
-GITHUB_TOKEN=seu_token_aqui
-GITHUB_USERNAME=seu_usuario
-JWT_SECRET=qualquer_string_secreta
-```
+Veja o arquivo `.env.example` na raiz do projeto — ele lista todas as variáveis que o `docker-compose.yml` espera (Grok, GitHub, WhatsApp, domínios). No Portainer, cole o conteúdo direto na seção de environment variables da stack.
 
 ## Fluxo do MVP
 

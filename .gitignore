@@ -3,6 +3,7 @@ node_modules/
 .next/
 
 # dados sensíveis / gerados
+.env
 backend/.env
 bot/.env
 backend/data/
@@ -13,3 +14,4 @@ bot/.wwebjs_cache/
 .DS_Store
 *.log
 npm-debug.log*
+

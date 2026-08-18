@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Dashboard from '../../components/Dashboard';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || ''; // vazio = caminho relativo, via nginx
 const USER_ID = 1; // MVP: usuário único, você mesmo
 
 export default function TodaySessionPage() {

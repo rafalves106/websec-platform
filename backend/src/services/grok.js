@@ -1,7 +1,7 @@
-// Integração com a API do Grok (xAI) pra gerar o conteúdo de cada sessão diária.
-// A API do Grok segue formato compatível com OpenAI — endpoint muda, payload é parecido.
+// Integração com a Groq (api.groq.com) pra gerar o conteúdo de cada sessão diária.
+// Apesar do nome das envs (GROK_*), é Groq — inferência rápida, formato compatível com OpenAI.
 
-const GROK_API_URL = 'https://api.x.ai/v1/chat/completions';
+const GROK_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 /**
  * Gera o conteúdo de uma sessão diária: explicação, exemplo de código,
@@ -37,7 +37,7 @@ Responda APENAS em JSON, sem markdown, no formato:
       Authorization: `Bearer ${process.env.GROK_API_KEY}`,
     },
     body: JSON.stringify({
-      model: 'grok-beta',
+      model: process.env.GROK_MODEL || 'openai/gpt-oss-20b',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: `Módulo: ${moduleTitle}. Tópico de hoje: ${topic}.` },
